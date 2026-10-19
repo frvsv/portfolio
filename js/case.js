@@ -25,9 +25,6 @@ const also = `
     </div>
   </nav>`;
 
-const figmaBtn = p && p.figma
-  ? `<a class="btn" href="${esc(p.figma)}" target="_blank" rel="noopener noreferrer">${esc(p.figmaLabel || "Открыть макет в Figma")} <span class="arr" aria-hidden="true">↗</span></a>` : "";
-
 async function build() {
   if (!p) { main.innerHTML = `<div class="wrap case-end"><p>Проект не найден.</p></div>${also}`; return; }
   document.title = `${p.title} — Данил Сафин`;
@@ -37,7 +34,6 @@ async function build() {
       main.innerHTML = `<div class="case"><div class="wrap">
         ${renderCover(data.cover)}
         ${data.sections.map(renderSection).join("")}
-        ${figmaBtn ? `<div class="case-end"><div class="case-end__top">${figmaBtn}</div></div>` : ""}
       </div></div>${also}`;
       return;
     } catch (e) { console.error("Не удалось загрузить кейс:", e); }
@@ -46,7 +42,7 @@ async function build() {
   main.innerHTML = `<div class="wrap case-hero">
       <p class="label">${esc(p.category)}</p>
       <h1>${esc(p.title)}</h1>
-      <div class="case-hero__grid"><div class="case-hero__sum"><p>${esc(p.summary)}</p>${figmaBtn ? `<div class="btn-row">${figmaBtn}</div>` : ""}</div></div>
+      <div class="case-hero__grid"><div class="case-hero__sum"><p>${esc(p.summary)}</p></div></div>
       <div class="case-soon"><div class="h2">Скоро</div><p>Презентация этого кейса появится на этой странице.</p></div>
     </div>${also}`;
 }

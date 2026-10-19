@@ -23,9 +23,6 @@ export const PROJECTS = [
     coverAlt: "Обложка кейса PrayBible: название, роль, команда и экран приложения на смартфоне",
     summary:
       "Заказная разработка в рамках брендбука и ТЗ клиента: AI-приложение на стыке веры и технологий.",
-    // Ссылка на макет в Figma (необязательно). У файла должен быть доступ «просмотр по ссылке».
-    figma: "https://www.figma.com/design/LskfXsxGEBkCY7iabL6jDj/Untitled?node-id=0-1",
-    figmaLabel: "Открыть макет в Figma",
     hasCase: true,                // true — страница строится из data/cases/<slug>.js
   },
   {
@@ -38,7 +35,6 @@ export const PROJECTS = [
     cover: "",
     coverBg: "#e7e3da",
     summary: "Кейс находится в работе.",
-    figma: "",
     hasCase: false,
   },
   {
@@ -51,7 +47,6 @@ export const PROJECTS = [
     cover: "",
     coverBg: "#dfe3e6",
     summary: "Кейс находится в работе.",
-    figma: "",
     hasCase: false,
   },
 ];
