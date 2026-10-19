@@ -1,63 +1,54 @@
-// Шаблон страницы кейса: один код — любая страница проекта.
-// Данные берутся из data/projects.js по атрибуту <body data-slug="...">.
+// Загрузчик страницы кейса: берёт slug из <body data-slug>, собирает страницу из
+// data/projects.js (шапка, соседние проекты) и data/cases/<slug>.js (содержимое).
 import { PROJECTS } from "../data/projects.js";
 import { esc, renderNav, renderFooter, reveal } from "./common.js";
-import { mountPdfViewer } from "./pdf-viewer.js";
+import { renderCover, renderSection, setBase } from "./case-blocks.js";
 
-const base = "../../";
-renderNav(base);
-renderFooter(base);
+const BASE = "../../";
+setBase(BASE);
+renderNav(BASE);
+renderFooter(BASE);
 
 const slug = document.body.dataset.slug;
-const idx = PROJECTS.findIndex((p) => p.slug === slug);
-const root = document.getElementById("case");
+const i = PROJECTS.findIndex((p) => p.slug === slug);
+const p = PROJECTS[i];
+const main = document.getElementById("main");
 
-if (idx < 0) {
-  root.innerHTML = `<div class="wrap case-hero"><h1>Проект не найден</h1><p><a class="link" href="${base}#projects">К списку проектов</a></p></div>`;
-} else {
-  const p = PROJECTS[idx];
-  const soon = p.status !== "ready";
+// Предыдущий / следующий проект (по кругу)
+const prev = PROJECTS[(i - 1 + PROJECTS.length) % PROJECTS.length];
+const next = PROJECTS[(i + 1) % PROJECTS.length];
+const also = `
+  <nav class="wrap also" aria-label="Другие проекты">
+    <div class="also__grid">
+      <a href="${BASE}projects/${esc(prev.slug)}/"><span class="label">← Предыдущий проект</span><div class="also__t">${esc(prev.title)}</div></a>
+      <a href="${BASE}projects/${esc(next.slug)}/"><span class="label">Следующий проект →</span><div class="also__t">${esc(next.title)}</div></a>
+    </div>
+  </nav>`;
+
+const figmaBtn = p && p.figma
+  ? `<a class="btn" href="${esc(p.figma)}" target="_blank" rel="noopener noreferrer">${esc(p.figmaLabel || "Открыть макет в Figma")} <span class="arr" aria-hidden="true">↗</span></a>` : "";
+
+async function build() {
+  if (!p) { main.innerHTML = `<div class="wrap case-end"><p>Проект не найден.</p></div>${also}`; return; }
   document.title = `${p.title} — Данил Сафин`;
-  const md = document.querySelector('meta[name="description"]');
-  if (md) md.content = `${p.title}: ${p.summary}`;
-
-  const meta = (p.meta || []).map(([k, v]) => `<div><dt>${esc(k)}</dt><dd>${esc(v)}</dd></div>`).join("");
-  const prev = PROJECTS[(idx - 1 + PROJECTS.length) % PROJECTS.length];
-  const next = PROJECTS[(idx + 1) % PROJECTS.length];
-
-  root.innerHTML = `
-    <section class="wrap case-hero">
-      <a class="link case-hero__back" href="${base}#projects">← Все проекты</a>
-      <p class="label" style="margin-bottom:14px">${esc(p.category)}${p.platform ? " · " + esc(p.platform) : ""}</p>
-      <h1>${esc(p.title)}</h1>
-      <div class="case-hero__grid">
-        <div class="case-hero__sum">
-          <p>${esc(p.summary)}</p>
-          <div class="btn-row">
-            ${p.pdf ? `<a class="btn btn--solid" href="#deck">Смотреть презентацию <span class="arr" aria-hidden="true">↓</span></a>` : ""}
-            ${p.figma ? `<a class="btn" href="${esc(p.figma)}" target="_blank" rel="noopener">${esc(p.figmaLabel || "Открыть в Figma")} <span class="arr" aria-hidden="true">↗</span></a>` : ""}
-          </div>
-        </div>
-        ${meta ? `<dl class="meta">${meta}</dl>` : ""}
-      </div>
-      ${p.cover
-        ? `<div class="case-cover" style="background:${esc(p.coverBg || "var(--bg-2)")}"><img src="${base}${esc(p.cover)}" alt="${esc(p.coverAlt || p.title)}" width="2629" height="1479"></div>`
-        : ""}
-      ${!p.pdf ? `<div class="case-soon"><p class="h2">Скоро здесь</p><p>Оригинальная презентация проекта появится на этой странице.</p></div>` : ""}
-    </section>
-
-    ${p.pdf ? `<section class="wrap deck" id="deck" aria-label="Презентация проекта"><div class="section__head"><h2 class="label">Презентация</h2><span class="label">Оригинальный PDF</span></div><div id="viewer-root"></div></section>` : ""}
-
-    <section class="wrap also" aria-label="Другие проекты">
-      <div class="section__head"><h2 class="label">Другие проекты</h2><a class="link label" href="${base || "./"}">На главную</a></div>
-      <div class="also__grid">
-        <a href="${base}projects/${esc(prev.slug)}/"><span class="label">← Предыдущий</span><div class="also__t">${esc(prev.title)}</div></a>
-        <a href="${base}projects/${esc(next.slug)}/"><span class="label">Следующий →</span><div class="also__t">${esc(next.title)}</div></a>
-      </div>
-    </section>`;
-
-  if (p.pdf) {
-    mountPdfViewer(document.getElementById("viewer-root"), { src: p.pdf, title: p.pdfTitle || p.title, video: p.video, base });
+  if (p.hasCase) {
+    try {
+      const data = (await import(`../data/cases/${slug}.js`)).default;
+      main.innerHTML = `<div class="case"><div class="wrap">
+        ${renderCover(data.cover)}
+        ${data.sections.map(renderSection).join("")}
+        ${figmaBtn ? `<div class="case-end"><div class="case-end__top">${figmaBtn}</div></div>` : ""}
+      </div></div>${also}`;
+      return;
+    } catch (e) { console.error("Не удалось загрузить кейс:", e); }
   }
-  reveal();
+  // Заглушка «Скоро» — для проектов без презентации
+  main.innerHTML = `<div class="wrap case-hero">
+      <p class="label">${esc(p.category)}</p>
+      <h1>${esc(p.title)}</h1>
+      <div class="case-hero__grid"><div class="case-hero__sum"><p>${esc(p.summary)}</p>${figmaBtn ? `<div class="btn-row">${figmaBtn}</div>` : ""}</div></div>
+      <div class="case-soon"><div class="h2">Скоро</div><p>Презентация этого кейса появится на этой странице.</p></div>
+    </div>${also}`;
 }
+await build();
+reveal();

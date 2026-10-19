@@ -1,6 +1,10 @@
 // 3D-объект первого экрана: скульптура «скрученная лента-кольцо + жемчужина».
 // Рисуется прямо на WebGL-шейдере (ray marching) — без сторонних библиотек.
 // Есть: пауза вне экрана, упрощение на мобильных, reduced motion, статичный fallback.
+//
+// Форма ленты задаётся uniform-ами uBand (ширина, толщина) и uRim (яркость светлой кромки).
+// Для экранов шире 720 px они равны исходным значениям — десктоп не менялся.
+// Для узких экранов (смартфоны) лента чуть тоньше, а кромка спокойнее.
 
 const VS = `attribute vec2 p; void main(){ gl_Position = vec4(p, 0.0, 1.0); }`;
 
@@ -11,6 +15,8 @@ uniform float uTime;
 uniform mat3 uRot;
 uniform int uSteps;
 uniform vec3 uAccent;
+uniform vec2 uBand;   // x — ширина ленты, y — толщина
+uniform float uRim;   // яркость светлой кромки
 
 mat2 rot(float a){ float c = cos(a), s = sin(a); return mat2(c, -s, s, c); }
 
@@ -20,9 +26,9 @@ vec2 map(vec3 pw){
   float ang = atan(p.z, p.x);
   vec2 t = vec2(length(p.xz) - 0.95, p.y);
   t = rot(ang * 2.0) * t;                       // двойной оборот ленты
-  float w = 0.36 + 0.07 * sin(ang * 3.0);       // «дышащая» ширина
-  vec2 ab = vec2(w, 0.125);
-  float d1 = (length(t / ab) - 1.0) * 0.125;
+  float w = uBand.x + 0.07 * sin(ang * 3.0);    // «дышащая» ширина
+  vec2 ab = vec2(w, uBand.y);
+  float d1 = (length(t / ab) - 1.0) * uBand.y;
   vec3 pc = p - vec3(0.0, 0.05 * sin(uTime * 0.7), 0.0);
   float d2 = length(pc) - 0.27;
   return d1 < d2 ? vec2(d1, 0.0) : vec2(d2, 1.0);
@@ -104,7 +110,7 @@ void main(){
   float fr = pow(1.0 - max(dot(n, v), 0.0), 3.0);
   vec3 r = reflect(rd, n);
   vec3 env = mix(vec3(0.55, 0.5, 0.45), vec3(1.0, 0.98, 0.94), smoothstep(-0.6, 0.8, r.y));
-  col += env * fr * (id < 0.5 ? 0.12 : 0.35) * occ;
+  col += env * fr * (id < 0.5 ? uRim : 0.35) * occ;
 
   col = pow(col, vec3(1.0 / 2.2));
   gl_FragColor = vec4(col, 1.0);
@@ -128,6 +134,7 @@ export function initHero3D(hero, canvas) {
   const fail = () => hero.classList.add("no-webgl");
   const reduce = matchMedia("(prefers-reduced-motion: reduce)").matches;
   const isMobile = matchMedia("(max-width: 720px), (pointer: coarse)").matches;
+  const narrowMQ = matchMedia("(max-width: 720px)");
 
   let gl;
   try {
@@ -163,9 +170,16 @@ export function initHero3D(hero, canvas) {
   gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
 
   const U = (n) => gl.getUniformLocation(prog, n);
-  const uRes = U("uRes"), uTime = U("uTime"), uRot = U("uRot"), uSteps = U("uSteps"), uAccent = U("uAccent");
+  const uRes = U("uRes"), uTime = U("uTime"), uRot = U("uRot"), uSteps = U("uSteps"), uAccent = U("uAccent"), uBand = U("uBand"), uRim = U("uRim");
   gl.uniform3f(uAccent, 0.86, 0.27, 0.12);
   gl.uniform1i(uSteps, isMobile ? 56 : 84);
+
+  // Форма ленты: десктоп — исходные значения (0.36 / 0.125 / 0.12); смартфон — тоньше и спокойнее.
+  const applyShape = () => {
+    if (narrowMQ.matches) { gl.uniform2f(uBand, 0.30, 0.098); gl.uniform1f(uRim, 0.07); }
+    else { gl.uniform2f(uBand, 0.36, 0.125); gl.uniform1f(uRim, 0.12); }
+  };
+  applyShape();
 
   // На обычных экранах рендерим чуть плотнее (сглаживание краёв), на телефонах — экономнее.
   const maxDpr = isMobile ? 1.5 : 2;
@@ -178,6 +192,7 @@ export function initHero3D(hero, canvas) {
       gl.viewport(0, 0, w, h);
     }
     gl.uniform2f(uRes, w, h);
+    applyShape();
   };
 
   let mx = 0, my = 0, tx = 0, ty = 0;

@@ -10,7 +10,7 @@ const list = document.getElementById("project-list");
 list.innerHTML = PROJECTS.map((p, i) => {
   const soon = p.status !== "ready";
   const media = p.cover
-    ? `<img src="${esc(p.cover)}" alt="${esc(p.coverAlt || p.title)}" width="2629" height="1479" loading="lazy" decoding="async">`
+    ? `<img src="${esc(p.cover)}" alt="${esc(p.coverAlt || p.title)}" width="${p.coverW || 3000}" height="${p.coverH || 1691}" loading="lazy" decoding="async">`
     : `<span class="card__soon" aria-hidden="true">${esc(p.title)}</span>`;
   return `
   <a class="card reveal ${soon ? "card--soon" : ""}" href="projects/${esc(p.slug)}/" aria-label="${esc(p.title)}: ${soon ? "кейс в подготовке" : "открыть кейс"}">
