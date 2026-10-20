@@ -135,7 +135,7 @@ ul { list-style: none; }
 
 /* ---------- Секции ---------- */
 .section { padding-block: clamp(80px, 12vw, 180px) 0; }
-.section__head { display: flex; justify-content: space-between; align-items: baseline; border-top: 1px solid var(--ink); padding-top: 14px; margin-bottom: clamp(32px, 5vw, 72px); }
+.section__head { display: flex; justify-content: flex-start; gap: 12px; align-items: baseline; border-bottom: 1px solid var(--ink); padding-bottom: 14px; margin-bottom: clamp(32px, 5vw, 72px); }
 .h2 { font-weight: 300; font-size: clamp(2rem, 4.2vw, 4.2rem); line-height: 1.04; letter-spacing: -.03em; }
 
 /* ---------- Обо мне ---------- */
