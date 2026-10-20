@@ -2,7 +2,7 @@
 // data/projects.js (шапка, соседние проекты) и data/cases/<slug>.js (содержимое).
 import { PROJECTS } from "../data/projects.js";
 import { esc, renderNav, renderFooter, reveal } from "./common.js";
-import { renderCover, renderSection, setBase } from "./case-blocks.js";
+import { renderCover, renderSection, setBase, initJourneys } from "./case-blocks.js";
 
 const BASE = "../../";
 setBase(BASE);
@@ -35,6 +35,7 @@ async function build() {
         ${renderCover(data.cover)}
         ${data.sections.map(renderSection).join("")}
       </div></div>${also}`;
+      initJourneys();
       return;
     } catch (e) { console.error("Не удалось загрузить кейс:", e); }
   }

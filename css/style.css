@@ -5,12 +5,12 @@
    ============================================================ */
 
 :root {
-  --bg: #f3f1ec;
-  --bg-2: #ebe8e1;
+  --bg: #fafaf8;
+  --bg-2: #f0f0ed;
   --ink: #15140f;
   --ink-2: #4b4a43;
   --ink-3: #8a877d;
-  --line: #d7d3c8;
+  --line: #e2e1dc;
   --accent: #d8431f;
   --accent-ink: #ffffff;
 
@@ -128,7 +128,7 @@ ul { list-style: none; }
 }
 .hero h1 em { font-style: normal; color: var(--accent); }
 /* Новый заголовок шире прежнего: на ноутбуках чуть уменьшаем кегль, чтобы строка не заходила на 3D-объект */
-@media (min-width: 1025px) { .hero h1 { font-size: clamp(2.35rem, 4.4vw, 5.3rem); } }
+@media (min-width: 1025px) { .hero h1 { font-size: clamp(2.2rem, 3.5vw, 4.6rem); max-width: 12.5em; } }
 .hero__sub { margin-top: clamp(20px, 3.5vh, 36px); max-width: 33rem; color: var(--ink-2); font-size: clamp(16px, 1.25vw, 19px); }
 .hero__row { margin-top: clamp(28px, 5vh, 48px); display: flex; align-items: center; gap: 28px; flex-wrap: wrap; }
 .hero__meta { display: flex; justify-content: space-between; border-top: 1px solid var(--line); padding-block: 14px; position: relative; z-index: 1; }
@@ -256,6 +256,7 @@ ul { list-style: none; }
   .nav__logo { font-size: 15px; }
   /* смартфон: объект меньше и не заходит на текст */
   .hero__stage { width: min(76vw, 330px); margin: 4px auto 6px; }
+  .hero h1 { font-size: clamp(1.9rem, 8.2vw, 2.5rem); }
   .hero__meta { flex-direction: column; gap: 4px; }
   .skills { grid-template-columns: 1fr; }
   .card__media { aspect-ratio: 4 / 3.2; }

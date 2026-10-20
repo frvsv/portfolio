@@ -55,7 +55,7 @@ function part(p) {
 const parts = (arr) => arr.map((p) => `<div class="pp">${part(p)}</div>`).join("");
 
 // --- Шапка раздела ------------------------------------------------------------
-const bar = (s) => `<div class="cs__bar"><span class="label">${plain(s.label)}</span><span class="label">${esc(s.n)}</span></div>`;
+const bar = (s) => `<div class="cs__bar"><span class="label">${esc(s.n)}</span><span class="label">${plain(s.label)}</span></div>`;
 
 function sectionHead(s) {
   return `<header class="cs__head">${bar(s)}
@@ -93,7 +93,7 @@ function banner(b) {
   </aside>`;
 }
 
-const barBlock = (b) => `<p class="bar">${plain(b.text)}</p>`;
+const barBlock = (b) => `<p class="bar bar--key">${plain(b.text)}</p>`;
 const noteBlock = (b) => note(b.text);
 
 // --- Кольцевая диаграмма ----------------------------------------------------------
@@ -130,6 +130,7 @@ function donut(d) {
     <svg class="dn__svg" viewBox="-190 0 880 334" aria-hidden="true">
       <g transform="rotate(${-90 + d.start} ${CX} ${CY})">${rings}</g>${labels}
     </svg>
+    <svg class="dn__ring" viewBox="12 29 276 276" width="260" height="260" aria-hidden="true"><g transform="rotate(${-90 + d.start} ${CX} ${CY})">${rings}</g></svg>
     <ul class="dn__legend">${legend}</ul>
   </figure>`;
 }
@@ -167,7 +168,7 @@ function journey(b) {
   const marks = b.points.map((p, i) =>
     `<span class="jr__pt" style="left:${xy[i][0]}%;top:calc(${JPAD}px + ${p.level} * (100% - ${2 * JPAD}px))">${img({ src: p.emoji, w: 144, h: 144, alt: "" }, "jr__emoji")}</span>`).join("");
   const steps = b.steps.map((s, i) => `
-    <li class="jstep${s.tone ? ` jstep--${s.tone}` : ""}">
+    <li class="jstep${s.tone ? ` jstep--${s.tone}` : ""}" style="--lv:${b.points[i] ? b.points[i].level : 0.5}">
       ${b.points[i] ? img({ src: b.points[i].emoji, w: 144, h: 144, alt: "" }, "jstep__emoji") : ""}
       <h4 class="plabel">${plain(s.label)}</h4><p>${plain(s.text)}</p>
     </li>`).join("");
@@ -176,7 +177,7 @@ function journey(b) {
     <div class="jr" style="--jh:${JH}px" aria-hidden="true">
       <svg class="jr__line" viewBox="0 0 100 100" preserveAspectRatio="none"><path d="${curve(xy)}" vector-effect="non-scaling-stroke" fill="none"/></svg>${marks}
     </div>
-    <ol class="jsteps" style="--n:${N}">${steps}</ol>
+    <ol class="jsteps" style="--n:${N}">${steps}<svg class="jv" aria-hidden="true"><path/></svg></ol>
     ${note(b.note)}
   </div>`;
 }
@@ -209,42 +210,27 @@ function palette(b) {
 }
 
 // --- User flow: UserFlowDiagram / FlowNode ----------------------------------------------------------
-// Три группы (вход → онбординг → ключевые экраны), внутри — цепочки узлов со стрелками.
-// На узких экранах цепочки становятся вертикальными. Стрелки — CSS, текст в узлах переносится сам.
+// Одна колонка. Между узлами — одинаковая SVG-стрелка (.fa, 1px), каждая стрелка касается обоих узлов:
+// ни обрывов, ни линий «в пустоту». Развилка — ряд из двух узлов, над каждым своя стрелка от узла выше.
 const fnode = (t, tone, cls = "") => {
   const [a, ...rest] = String(t).split("\n");
   return `<div class="fn fn--${tone}${cls ? " " + cls : ""}"><b>${esc(a)}</b>${rest.length ? `<small>${esc(rest.join(" "))}</small>` : ""}</div>`;
 };
-const far = `<i class="far" aria-hidden="true"></i>`;
-const chain = (nodes) => nodes.join(far);
+const FA = `<svg class="fa" viewBox="0 0 9 22" width="9" height="22" aria-hidden="true"><path d="M4.5 0V21M1 17.5L4.5 21L8 17.5" fill="none" stroke="currentColor" stroke-width="1"/></svg>`;
+const chain = (nodes) => nodes.join(FA);
+const cell = (inner) => `<div class="fcell">${FA}${inner}</div>`;
 
 function flow(b) {
-  const a = b.auth;
-  const far0 = `<i class="far far--plain" aria-hidden="true"></i>`;
-  const login = `<div class="fchain">
-      ${fnode(b.start[0].t, "sky")}${far}${fnode(b.start[1].t, "sky")}${far0}
-      <div class="fsplit" style="--k:2">
-        <div class="fbr">${fnode(a.signIn, "sky")}${far}${fnode(a.recover, "sky", "fn--aside")}</div>
-        <div class="fbr">${fnode(a.signUp, "sky")}</div>
-      </div>
-    </div>`;
-  const onboarding = `<div class="fchain fchain--wrap">${chain(b.onboarding.map((t) => fnode(t, "sun")))}</div>`;
-  // Дети Home: Menu (с подпунктами) и четыре ключевых экрана — как в исходной схеме
-  const menu = `<div class="fb fb--menu">${fnode(b.menu.title, "white", "fn--menu")}
-      <div class="fmenu"><i class="fdown fdown--s" aria-hidden="true"></i>${b.menu.items.map((t) => fnode(t, "white")).join("")}</div></div>`;
-  const keys = b.key.map((t) => `<div class="fb">${fnode(t, "key")}</div>`).join("");
+  const a = b.auth, T = b.titles || {};
+  const login = `${fnode(b.start[0].t, "sky")}${FA}${fnode(b.start[1].t, "sky")}
+    <div class="frow">${cell(fnode(a.signIn, "sky") + FA + fnode(a.recover, "sky"))}${cell(fnode(a.signUp, "sky"))}</div>`;
+  const onboarding = `${chain(b.onboarding.map((t) => fnode(t, "sun")))}`;
+  const home = `${fnode(b.home, "key")}${FA}
+    <p class="fnote">${plain(T.fan || "Доступно с главного экрана")}</p>
+    <div class="fgrid">${b.key.map((t) => fnode(t, "key")).join("")}${fnode(b.menu.title, "white", "fn--wide")}</div>${FA}
+    <div class="fn fn--white fn--list"><ul>${b.menu.items.map((t) => `<li>${esc(t)}</li>`).join("")}</ul></div>`;
   const legend = b.legend.map((l) => `<li><i class="lg lg--${esc(l.tone)}"></i>${plain(l.label)}</li>`).join("");
-  return `<div class="flow">
-    <div class="fstage fstage--login">${login}</div>
-    <i class="fdown" aria-hidden="true"></i>
-    <div class="fstage fstage--onb">${onboarding}</div>
-    <i class="fdown" aria-hidden="true"></i>
-    <div class="fstage fstage--home">
-      ${fnode(b.home, "key", "fn--home")}
-      <i class="fdown fdown--s" aria-hidden="true"></i>
-      <div class="fbranch">${menu}${keys}</div>
-    </div>
-  </div>
+  return `<div class="flow">${login}${FA}${onboarding}${FA}${home}</div>
   <ul class="legend">${legend}</ul>`;
 }
 
@@ -327,7 +313,7 @@ export function renderSection(sec) {
 }
 
 export function renderCover(c) {
-  const meta = c.meta.map(([k, v]) => `<div class="tile"><dt>${plain(k)}</dt><dd>${plain(v)}</dd></div>`).join("");
+  const meta = c.meta.map(([k, v, sub]) => `<div class="tile"><dt>${plain(k)}</dt><dd>${plain(v)}${sub ? `<small>${plain(sub)}</small>` : ""}</dd></div>`).join("");
   return `<header class="cover">
     <div class="cover__text">
       <p class="label cover__eyebrow">${plain(c.eyebrow)}</p>
@@ -338,4 +324,23 @@ export function renderCover(c) {
     </div>
     <div class="cover__media">${img(c.image, "cover__phone")}</div>
   </header>`;
+}
+
+// Мобильная кривая пути: рисуется по реальным позициям эмодзи (работает при любой высоте карточек)
+export function initJourneys(root = document) {
+  root.querySelectorAll(".jsteps").forEach((ol) => {
+    const svg = ol.querySelector(".jv"); if (!svg) return;
+    const draw = () => {
+      const on = getComputedStyle(ol.querySelector(".jstep__emoji") || ol).display !== "none";
+      svg.style.display = on ? "block" : "none"; if (!on) return;
+      const o = ol.getBoundingClientRect();
+      const pts = [...ol.querySelectorAll(".jstep__emoji")].map((e) => { const r = e.getBoundingClientRect(); return [r.left - o.left + r.width / 2, r.top - o.top + r.height / 2]; });
+      svg.setAttribute("viewBox", `0 0 ${o.width} ${o.height}`); svg.setAttribute("width", o.width); svg.setAttribute("height", o.height);
+      svg.firstElementChild.setAttribute("d", curve(pts));
+    };
+    draw();
+    if ("ResizeObserver" in window) new ResizeObserver(draw).observe(ol);
+    ol.querySelectorAll("img").forEach((i) => i.addEventListener("load", draw));
+    window.addEventListener("resize", draw);
+  });
 }
