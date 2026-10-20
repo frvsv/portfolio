@@ -103,9 +103,11 @@ function donut(d) {
   const CX = 150, CY = 167, RM = 108, SW = 60, C = 2 * Math.PI * RM;
   let acc = 0;
   const total = d.items.reduce((s, i) => s + i.value, 0);
-  const rings = d.items.map((i) => {
-    const len = (i.value / total) * C;
-    const el = `<circle cx="${CX}" cy="${CY}" r="${RM}" fill="none" stroke="var(${TONE_VAR[i.tone]})" stroke-width="${SW}" stroke-dasharray="${len.toFixed(2)} ${(C - len).toFixed(2)}" stroke-dashoffset="${(-acc).toFixed(2)}"/>`;
+  // Подложка цвета последнего сектора + небольшое перекрытие секторов: на стыках нет щелей и «зубцов»
+  const last = d.items[d.items.length - 1];
+  const rings = `<circle cx="${CX}" cy="${CY}" r="${RM}" fill="none" stroke="var(${TONE_VAR[last.tone]})" stroke-width="${SW}"/>` + d.items.slice(0, -1).map((i) => {
+    const len = (i.value / total) * C, draw = len + 1.2;
+    const el = `<circle cx="${CX}" cy="${CY}" r="${RM}" fill="none" stroke="var(${TONE_VAR[i.tone]})" stroke-width="${SW}" stroke-dasharray="${draw.toFixed(2)} ${(C - draw).toFixed(2)}" stroke-dashoffset="${(-acc).toFixed(2)}"/>`;
     acc += len;
     return el;
   }).join("");
