@@ -35,6 +35,7 @@ async function build() {
         ${renderCover(data.cover)}
         ${data.sections.map(renderSection).join("")}
       </div></div>${also}`;
+      if (data.theme) { const el = main.querySelector(".case"); for (const [k, v] of Object.entries(data.theme)) el.style.setProperty("--" + k, v); }
       initJourneys();
       return;
     } catch (e) { console.error("Не удалось загрузить кейс:", e); }

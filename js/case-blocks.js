@@ -190,9 +190,9 @@ function insights(b) {
       <span class="ins__n">${esc(it.n)}</span>
       <h3 class="ins__t">${plain(it.title)}</h3>
       <div class="ins__c"><h4 class="plabel">${plain(b.labels.from)}</h4><p>${plain(it.from)}</p></div>
-      <div class="ins__c"><h4 class="plabel">${plain(b.labels.solution)}</h4><p>${plain(it.solution)}</p></div>
+      ${it.solution ? `<div class="ins__c"><h4 class="plabel">${plain(b.labels.solution)}</h4><p>${plain(it.solution)}</p></div>` : ""}
     </li>`).join("");
-  return `<ol class="ins">${rows}</ol>`;
+  return `<ol class="ins${b.items.every((i) => !i.solution) ? " ins--one" : ""}">${rows}</ol>`;
 }
 
 // --- Айдентика: палитра и TypographySpecimen -------------------------------------------------------
@@ -270,6 +270,21 @@ function videoSlot(v) {
   return `<figure class="vslot" style="aspect-ratio:${esc(v.ratio || "9 / 16")}" data-state="${v.src ? "ready" : "empty"}">${body}</figure>`;
 }
 
+// Произвольная картинка/композиция экранов (не «один телефон»): variant — plain | multiply (белый фон картинки) | dark (тёмная панель)
+function figure(f) {
+  const items = f.items || [f];
+  const style = f.maxw ? ` style="max-width:${f.maxw}px"` : "";
+  return `<figure class="fig fig--${esc(f.variant || "plain")}"${style}>${items.map((i) => img(i, "fig__img")).join("")}</figure>`;
+}
+
+// Сценарий: последовательность шагов со стрелками (горизонтально на десктопе, вертикально на мобильном)
+const ARW_H = `<svg class="scn__a scn__a--h" viewBox="0 0 22 9" width="22" height="9" aria-hidden="true"><path d="M0 4.5H21M17.5 1L21 4.5L17.5 8" fill="none" stroke="currentColor" stroke-width="1"/></svg>`;
+const ARW_V = `<svg class="scn__a scn__a--v" viewBox="0 0 9 22" width="9" height="22" aria-hidden="true"><path d="M4.5 0V21M1 17.5L4.5 21L8 17.5" fill="none" stroke="currentColor" stroke-width="1"/></svg>`;
+function scenario(b) {
+  const li = b.items.map((s, i) => `<li class="scn__i"><span class="scn__n">${String(i + 1).padStart(2, "0")}</span><h4 class="scn__t">${plain(s.title)}</h4><p>${plain(s.text)}</p></li>`);
+  return `<ol class="scn">${li.join(ARW_H + ARW_V)}</ol>${b.note ? note(b.note) : ""}`;
+}
+
 // --- ProductScreenSection: текст + экран. Один шаблон для всех экранов продукта ------------------------
 // Порядок в текстовой колонке всегда один: заголовок → метка гипотезы (если есть) → части → заметка.
 function featureText(b, sec) {
@@ -281,7 +296,7 @@ function featureText(b, sec) {
 
 function feature(b, sec) {
   const side = b.phoneSide || "right";
-  const media = b.video ? videoSlot(b.video) : mockup(b.phone);
+  const media = b.video ? videoSlot(b.video) : b.figure ? figure(b.figure) : mockup(b.phone);
   return `<div class="feat feat--${side}${b.phone && b.phone.callouts ? " feat--co" : ""}">
     ${featureText(b, sec)}
     <div class="feat__media">${media}</div>
@@ -296,7 +311,7 @@ function timeline(b) {
 // Уникальный блок: произвольная вёрстка автора (доверенный HTML из data/cases/<slug>.js)
 const htmlBlock = (b) => b.html;
 
-const REGISTRY = { html: htmlBlock, cards, banner, bar: barBlock, note: noteBlock, method, compare, journey, insights, palette, flow, feature, timeline };
+const REGISTRY = { html: htmlBlock, cards, banner, bar: barBlock, note: noteBlock, method, compare, journey, insights, palette, flow, feature, timeline, scenario };
 
 // Свой тип блока можно зарегистрировать из кода: registerBlock("мой-тип", (данные, раздел) => "<html>")
 export const registerBlock = (type, fn) => { REGISTRY[type] = fn; };
@@ -319,7 +334,7 @@ export function renderCover(c) {
   return `<header class="cover">
     <div class="cover__text">
       <p class="label cover__eyebrow">${plain(c.eyebrow)}</p>
-      <h1 class="cover__brand">${img({ ...c.brand.icon, alt: "" }, "cover__icon")}${img(c.brand.wordmark, "cover__word")}</h1>
+      ${c.brand ? `<h1 class="cover__brand">${img({ ...c.brand.icon, alt: "" }, "cover__icon")}${img(c.brand.wordmark, "cover__word")}</h1>` : `<h1 class="cover__title">${plain(c.title)}</h1>`}
       <p class="cover__tag">${plain(c.tagline)}</p>
       <dl class="tiles">${meta}</dl>
       <p class="bar cover__result">${plain(c.result)}</p>
