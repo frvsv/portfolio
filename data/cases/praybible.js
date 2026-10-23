@@ -88,6 +88,7 @@ export default {
         { type: "bar", text: "Главная претензия к конкурентам — подписка и ограничения (26,4%), следом интерфейс (20,8%). Качество AI волнует меньше (5,7%)." },
         {
           type: "compare",
+          title: "Конкурентный анализ: YouVersion и Bible Chat",
           head: ["YouVersion", "BibleChat", "PrayBible"],
           rows: [
             ["Интеграция ИИ", "Короткие AI-заметки к стихам", "AI-чат в отдельном разделе", "AI-трактовка стихов внутри чтения, AI-пастор-компаньон, видеоблагословения"],
@@ -110,7 +111,7 @@ export default {
           items: [
             {
               heading: "Джон, 32",
-              avatar: { src: IMG + "persona-john.webp", alt: "Портрет персоны Джон" },
+              avatar: { src: IMG + "persona-john.webp", alt: "Джон" },
               parts: [
                 { chip: { text: "Боль", tone: "sun" }, text: "Отвлекают шумные приложения; сложно найти спокойный и сосредоточенный опыт" },
                 { chip: { text: "Мотивация", tone: "mint" }, text: "Хочет короткий, но значимый ритуал для начала дня" },
@@ -119,7 +120,7 @@ export default {
             },
             {
               heading: "Эмили, 32",
-              avatar: { src: IMG + "persona-emily.webp", alt: "Портрет персоны Эмили" },
+              avatar: { src: IMG + "persona-emily.webp", alt: "Эмили" },
               parts: [
                 { chip: { text: "Боль", tone: "sun" }, text: "Традиционные приложения кажутся устаревшими, контентом неудобно делиться" },
                 { chip: { text: "Мотивация", tone: "mint" }, text: "Ищет вдохновляющие, современные форматы, которыми приятно делиться" },
@@ -128,7 +129,7 @@ export default {
             },
             {
               heading: "Маргарет, 68",
-              avatar: { src: IMG + "persona-margaret.webp", alt: "Портрет персоны Маргарет" },
+              avatar: { src: IMG + "persona-margaret.webp", alt: "Маргарет" },
               parts: [
                 { chip: { text: "Боль", tone: "sun" }, text: "Многие приложения ломаются или становятся неудобными при увеличенном шрифте" },
                 { chip: { text: "Мотивация", tone: "mint" }, text: "Хочет лёгкий и прямой доступ к чтению Писания" },
@@ -203,7 +204,7 @@ export default {
       blocks: [
         {
           type: "insights",
-          labels: { from: "Откуда взялся", solution: "Решение" },
+          labels: { title: "Инсайт", from: "Откуда взялся", solution: "Решение" },
           items: [
             { n: "01", title: "Приложение должно ощущаться человечным, а не технологичным", from: "Конкурентный анализ, прото-персоны", solution: "Шрифтовая пара Playfair Display и Onest, AI представлен как пастор" },
             { n: "02", title: "Спокойный визуал повышает вовлечённость", from: "Прото-персона Джон (гипотеза), анализ отзывов", solution: "Палитра: глубокий синий, золотой акцент, светлые небесные фоны. Высокий уровень контрастности элементов" },
@@ -259,16 +260,16 @@ export default {
             { tone: "white", label: "Помощь/информация" },
           ],
           titles: { auth: "Вход", onboarding: "Онбординг", home: "Главный экран", fan: "Доступно с главного экрана" },
-          start: [{ t: "Loading screen" }, { t: "Login screen" }],
+          start: [{ t: "Экран загрузки\nLoading screen" }, { t: "Экран входа\nLogin screen" }],
           auth: {
-            recover: "Recover password",
-            signIn: "Sign in\nwith google / apple / email",
-            signUp: "Sign up\nwith google / apple / email",
+            recover: "Восстановление пароля\nRecover password",
+            signIn: "Вход\nGoogle / Apple / email",
+            signUp: "Регистрация\nGoogle / Apple / email",
           },
-          onboarding: ["Choose the direction", "Welcome video", "Setting up Personal Goals", "Offer of a subscription", "Pop-up with a rating and a review"],
-          home: "Home screen",
-          menu: { title: "Menu", items: ["Subscription", "About app", "Privacy policy", "Profile settings", "Terms of use", "Quit"] },
-          key: ["Pastor AI", "Digital chapel", "Blessing clips", "Read the Bible"],
+          onboarding: ["Выбор направления\nChoose the direction", "Приветственное видео\nWelcome video", "Настройка личных целей\nPersonal goals", "Предложение подписки\nSubscription offer", "Окно оценки и отзыва\nRating and review pop-up"],
+          home: "Главный экран\nHome screen",
+          menu: { title: "Меню\nMenu", items: ["Подписка", "О приложении", "Политика конфиденциальности", "Настройки профиля", "Условия использования", "Выход"] },
+          key: ["Пастор AI\nPastor AI", "Цифровая часовня\nDigital chapel", "Клипы благословений\nBlessing clips", "Чтение Библии\nRead the Bible"],
         },
       ],
     },
@@ -383,7 +384,7 @@ export default {
     {
       id: "delivery", n: "11", label: "Передача в разработку и публикация",
       title: "Три месяца *от ТЗ до релиза*",
-      lead: "Макеты ушли в разработку через Figma с базовой компонентной библиотекой. Я контролировал соответствие вёрстки макетам, продукт опубликован в App Store и Google Play.",
+      lead: "Подготовил все макеты к разработке, провёл дизайн-ревью перед публикацией. Продукт опубликован в App Store и Google Play.",
       blocks: [
         {
           type: "timeline",

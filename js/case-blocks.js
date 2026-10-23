@@ -32,7 +32,7 @@ export const setBase = (b) => { BASE = b; };
 const url = (s) => (s && !/^(https?:|data:|\/)/.test(s) ? BASE + s : s);
 
 const img = (i, cls = "", extra = "") =>
-  `<img${cls ? ` class="${cls}"` : ""} src="${esc(url(i.src))}" alt="${esc(i.alt ?? "")}" width="${i.w}" height="${i.h}" loading="lazy" decoding="async"${extra}>`;
+  `<img${cls ? ` class="${cls}"` : ""} src="${esc(url(i.src))}" alt="${esc(i.alt ?? "")}" width="${i.w}" height="${i.h}" ${i.eager ? 'loading="eager"' : 'loading="lazy" decoding="async"'}${extra}>`;
 
 // --- Мелкие компоненты ----------------------------------------------------------
 const chip = (c) => `<span class="chip chip--${esc(c.tone || "plain")}">${plain(c.text)}</span>`;
@@ -72,7 +72,7 @@ function cards(b) {
   const v = b.variant || "plain";
   const items = b.items.map((it) => {
     const id = it.avatar
-      ? `<header class="ccard__id">${img({ ...it.avatar, w: 256, h: 256 }, "avatar")}<h3 class="ccard__name">${plain(it.heading)}</h3></header>`
+      ? `<header class="ccard__id">${img({ ...it.avatar, w: 256, h: 256, eager: true }, "avatar")}<h3 class="ccard__name">${plain(it.heading)}</h3></header>`
       : it.heading ? `<h3 class="ccard__h">${plain(it.heading)}</h3>` : "";
     const k = it.kicker ? `<h3 class="plabel ccard__k">${plain(it.kicker)}</h3>` : "";
     const body = parts(it.parts);
@@ -148,7 +148,7 @@ function method(b) {
 function compare(b) {
   const head = b.head.map((h) => `<th scope="col">${plain(h)}</th>`).join("");
   const rows = b.rows.map((r) => `<tr><th scope="row">${plain(r[0])}</th>${r.slice(1).map((c, i) => `<td data-label="${esc(b.head[i])}">${plain(c)}</td>`).join("")}</tr>`).join("");
-  return `<table class="cmp"><thead><tr><td></td>${head}</tr></thead><tbody>${rows}</tbody></table>`;
+  return `${b.title ? `<h3 class="cmp__title">${plain(b.title)}</h3>` : ""}<table class="cmp"><thead><tr><td></td>${head}</tr></thead><tbody>${rows}</tbody></table>`;
 }
 
 // --- Путь пользователя: кривая над сеткой шагов (JourneyStep) ----------------------------
@@ -186,13 +186,20 @@ function journey(b) {
 
 // --- Инсайты ---------------------------------------------------------------------------------
 function insights(b) {
+  const hasSolution = b.items.some((i) => i.solution);
+  const head = `<div class="ins__row ins__head" aria-hidden="true">
+      <span></span>
+      <span>${plain(b.labels.title ?? "Инсайт")}</span>
+      <span>${plain(b.labels.from)}</span>
+      ${hasSolution ? `<span>${plain(b.labels.solution)}</span>` : ""}
+    </div>`;
   const rows = b.items.map((it) => `<li class="ins__row">
       <span class="ins__n">${esc(it.n)}</span>
       <h3 class="ins__t">${plain(it.title)}</h3>
-      <div class="ins__c"><h4 class="plabel">${plain(b.labels.from)}</h4><p>${plain(it.from)}</p></div>
-      ${it.solution ? `<div class="ins__c"><h4 class="plabel">${plain(b.labels.solution)}</h4><p>${plain(it.solution)}</p></div>` : ""}
+      <div class="ins__c"><h4 class="plabel sr-only">${plain(b.labels.from)}</h4><p>${plain(it.from)}</p></div>
+      ${it.solution ? `<div class="ins__c"><h4 class="plabel sr-only">${plain(b.labels.solution)}</h4><p>${plain(it.solution)}</p></div>` : ""}
     </li>`).join("");
-  return `<ol class="ins${b.items.every((i) => !i.solution) ? " ins--one" : ""}">${rows}</ol>`;
+  return `<div class="ins-wrap${hasSolution ? "" : " ins--one"}">${head}<ol class="ins">${rows}</ol></div>`;
 }
 
 // --- Айдентика: палитра и TypographySpecimen -------------------------------------------------------
