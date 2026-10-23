@@ -234,6 +234,8 @@ ul { list-style: none; }
 .also a:hover .also__t { color: var(--accent); }
 .also__t { font-weight: 300; font-size: var(--fs-h3); letter-spacing: -.03em; line-height: 1.05; margin-top: var(--sp-2); transition: color .25s; }
 .also a:last-child { text-align: right; }
+.also__grid--one { grid-template-columns: 1fr; }
+.also__grid--one a:last-child { text-align: left; }
 /* низ страницы кейса: после блока «Другие проекты» идёт только футер */
 .also { padding-bottom: var(--sp-7); }
 

@@ -17,11 +17,12 @@ const main = document.getElementById("main");
 // Предыдущий / следующий проект (по кругу)
 const prev = PROJECTS[(i - 1 + PROJECTS.length) % PROJECTS.length];
 const next = PROJECTS[(i + 1) % PROJECTS.length];
+const link = (pr, label) => `<a href="${BASE}projects/${esc(pr.slug)}/"><span class="label">${label}</span><div class="also__t">${esc(pr.title)}</div></a>`;
+const two = PROJECTS.length <= 2;   // при двух проектах «предыдущий» и «следующий» совпали бы
 const also = `
   <nav class="wrap also" aria-label="Другие проекты">
-    <div class="also__grid">
-      <a href="${BASE}projects/${esc(prev.slug)}/"><span class="label">← Предыдущий проект</span><div class="also__t">${esc(prev.title)}</div></a>
-      <a href="${BASE}projects/${esc(next.slug)}/"><span class="label">Следующий проект →</span><div class="also__t">${esc(next.title)}</div></a>
+    <div class="also__grid${two ? " also__grid--one" : ""}">
+      ${two ? link(next, "Другой проект →") : link(prev, "← Предыдущий проект") + link(next, "Следующий проект →")}
     </div>
   </nav>`;
 

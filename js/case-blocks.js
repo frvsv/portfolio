@@ -95,6 +95,7 @@ function banner(b) {
 
 const barBlock = (b) => `<p class="bar bar--key">${plain(b.text)}</p>`;
 const noteBlock = (b) => note(b.text);
+const statusBlock = (b) => `<aside class="status"><b>${plain(b.title)}.</b> <span>${plain(b.text)}</span></aside>`;
 
 // --- Кольцевая диаграмма ----------------------------------------------------------
 const TONE_VAR = { sun: "--tint-sun", mint: "--tint-mint", sky: "--tint-sky", ice: "--tint-ice", accent: "--accent" };
@@ -318,7 +319,7 @@ function timeline(b) {
 // Уникальный блок: произвольная вёрстка автора (доверенный HTML из data/cases/<slug>.js)
 const htmlBlock = (b) => b.html;
 
-const REGISTRY = { html: htmlBlock, cards, banner, bar: barBlock, note: noteBlock, method, compare, journey, insights, palette, flow, feature, timeline, scenario };
+const REGISTRY = { html: htmlBlock, cards, banner, bar: barBlock, note: noteBlock, status: statusBlock, method, compare, journey, insights, palette, flow, feature, timeline, scenario };
 
 // Свой тип блока можно зарегистрировать из кода: registerBlock("мой-тип", (данные, раздел) => "<html>")
 export const registerBlock = (type, fn) => { REGISTRY[type] = fn; };

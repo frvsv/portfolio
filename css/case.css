@@ -30,9 +30,10 @@
 .blk { min-width: 0; }
 
 /* ---------- Базовые мелкие элементы ---------- */
-.chip { display: inline-block; align-self: flex-start; font: 600 var(--fs-small)/1 var(--font); padding: var(--sp-2) var(--sp-3); border-radius: 999px; background: var(--tint-ice); color: var(--ink); }
+.chip { display: inline-block; align-self: flex-start; font: 600 var(--fs-small)/1 var(--font); padding: var(--sp-2) var(--sp-3); border-radius: 999px; background: var(--bg-2); color: var(--ink); }
 .chip--sun { background: var(--tint-sun); } .chip--mint { background: var(--tint-mint); }
 .chip--sky { background: var(--tint-sky); } .chip--ice { background: var(--tint-ice); }
+.chip--plain { background: var(--bg-2); }
 .chip--accent { background: var(--accent); color: var(--accent-ink); }
 /* HypothesisBadge — единственная метка гипотезы */
 .hyp { display: inline-block; align-self: flex-start; font: 600 var(--fs-small)/1 var(--font); color: var(--accent); border: 1px solid var(--accent); border-radius: 999px; padding: var(--sp-2) var(--sp-3); white-space: nowrap; }
@@ -91,7 +92,8 @@
 .cards--hypothesis .ccard { display: grid; grid-template-rows: subgrid; grid-row: span 2; row-gap: var(--sp-5); }
 
 /* ---------- Баннер «Ниша» ---------- */
-.banner { background: linear-gradient(115deg, var(--ba, #0a2760) 0%, var(--bb, #1d519a) 55%, var(--bc, #3a88d4) 100%); color: #fff; border-radius: var(--r); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--gap); align-items: center; padding: clamp(24px, 3.4vw, 48px); }
+/* плоская заливка цветом кейса */
+.banner { background: var(--ba, #1d519a); color: #fff; border-radius: var(--r); display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: var(--gap); align-items: center; padding: clamp(24px, 3.4vw, 48px); }
 .banner__text { max-width: 44rem; }
 .banner__k { color: #c9d8ee; }
 .banner__t { margin-top: var(--sp-4); font-weight: 300; font-size: clamp(1.25rem, 2.4vw, 2rem); line-height: 1.18; letter-spacing: -.025em; text-wrap: balance; }
@@ -295,3 +297,8 @@
   .cover__word { width: min(70vw, 300px); }
 }
 @media (prefers-reduced-motion: reduce) { .case * { scroll-behavior: auto !important; } }
+
+/* Плашка статуса кейса: одна на кейс, вместо повторяющихся оговорок */
+.status { display: flex; gap: var(--sp-3); align-items: baseline; padding: var(--sp-4) var(--sp-5); border: 1px solid var(--accent); border-radius: var(--radius, 12px); font-size: var(--fs-small); line-height: 1.5; color: var(--ink-2); }
+.status b { color: var(--accent); font-weight: 600; flex: none; }
+@media (max-width: 640px) { .status { flex-direction: column; gap: var(--sp-1); } }

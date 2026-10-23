@@ -26,18 +26,6 @@ export const PROJECTS = [
     hasCase: true,                // true — страница строится из data/cases/<slug>.js
   },
   {
-    slug: "x-mall",
-    status: "soon",
-    title: "X-Mall",
-    caption: "Кейс в подготовке — презентация появится здесь",
-    category: "Кейс в подготовке",
-    platform: "",
-    cover: "",
-    coverBg: "#e7e3da",
-    summary: "Кейс находится в работе.",
-    hasCase: false,
-  },
-  {
     slug: "barberbook",
     status: "ready",
     title: "BarberBook",
