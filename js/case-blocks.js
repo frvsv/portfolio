@@ -341,7 +341,6 @@ export function renderCover(c) {
   const meta = c.meta.map(([k, v, sub]) => `<div class="tile"><dt>${plain(k)}</dt><dd>${plain(v)}${sub ? `<small>${plain(sub)}</small>` : ""}</dd></div>`).join("");
   return `<header class="cover">
     <div class="cover__text">
-      <p class="label cover__eyebrow">${plain(c.eyebrow)}</p>
       ${c.brand ? `<h1 class="cover__brand">${img({ ...c.brand.icon, alt: "" }, "cover__icon")}${img(c.brand.wordmark, "cover__word")}</h1>` : `<h1 class="cover__title">${plain(c.title)}</h1>`}
       <p class="cover__tag">${plain(c.tagline)}</p>
       <dl class="tiles">${meta}</dl>

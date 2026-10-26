@@ -10,7 +10,7 @@ const list = document.getElementById("project-list");
 list.innerHTML = PROJECTS.map((p, i) => {
   const soon = p.status !== "ready";
   const media = p.cover
-    ? `<img src="${esc(p.cover)}" alt="${esc(p.coverAlt || p.title)}" width="${p.coverW || 3000}" height="${p.coverH || 1691}" loading="lazy" decoding="async">`
+    ? `<picture>${p.coverM ? `<source media="(max-width: 760px)" srcset="${esc(p.coverM)}" width="${p.coverMW || 1440}" height="${p.coverMH || 1800}">` : ""}<img src="${esc(p.cover)}" alt="${esc(p.coverAlt || p.title)}" width="${p.coverW || 3000}" height="${p.coverH || 1691}" loading="lazy" decoding="async"></picture>`
     : `<span class="card__soon" aria-hidden="true">${esc(p.title)}</span>`;
   return `
   <a class="card reveal ${soon ? "card--soon" : ""}" href="projects/${esc(p.slug)}/" aria-label="${esc(p.title)}: ${soon ? "кейс в подготовке" : "открыть кейс"}">
@@ -20,7 +20,6 @@ list.innerHTML = PROJECTS.map((p, i) => {
     </div>
     <div class="card__foot">
       <div>
-        <div class="card__no">${String(i + 1).padStart(2, "0")} / ${String(PROJECTS.length).padStart(2, "0")} · ${esc(p.category)}${p.platform ? " · " + esc(p.platform) : ""}</div>
         <h3 class="card__title">${esc(p.title)}</h3>
       </div>
       <p class="card__cap">${esc(p.caption)}</p>
