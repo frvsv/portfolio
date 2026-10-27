@@ -14,7 +14,7 @@ export const PROJECTS = [
     slug: "praybible",
     status: "ready",              // "ready" — кейс опубликован | "soon" — заглушка «Скоро»
     title: "PrayBible",
-    caption: "AI-продукт для верующих: спокойные цифровые ритуалы, которым доверяют люди из разных поколений",
+    caption: "Дизайн мобильного AI-приложения на стыке веры и технологий.",
     category: "Мобильное приложение",
     platform: "iOS, Android",
     cover: "assets/projects/praybible/cover.webp",   // обложка карточки, 16:9
@@ -31,23 +31,7 @@ export const PROJECTS = [
     slug: "barberbook",
     status: "ready",
     title: "BarberBook",
-    caption: "Telegram Mini App для онлайн-записи в барбершопы: дизайн-концепт с клиентской базой у бизнеса",
-    category: "Дизайн-концепт",
-    platform: "Telegram Mini App",
-    cover: "assets/projects/barberbook/cover.webp",   // обложка карточки, 16:9
-    coverW: 3000, coverH: 1691,
-    coverM: "assets/projects/barberbook/cover-m.webp",
-    coverMW: 1440, coverMH: 1800,
-    coverBg: "#f6efe7",
-    coverAlt: "Обложка кейса BarberBook: название, роль и экран записи в Telegram Mini App на смартфоне",
-    summary: "Продуктовый дизайн-концепт сервиса онлайн-записи: архитектура, сценарий записи и интерфейс MVP.",
-    hasCase: true,
-  },
-  {
-    slug: "barberbook-new",
-    status: "ready",
-    title: "BarberBook (новая версия)",
-    caption: "Сервис онлайн-записи в барбершопы внутри Telegram: дизайн-концепт",
+    caption: "Концепт сервиса онлайн-записи в барбершопы на базе Telegram Mini App.",
     category: "Дизайн-концепт",
     platform: "Telegram Mini App",
     cover: "assets/projects/barberbook/cover.webp",   // обложка карточки, 16:9

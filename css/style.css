@@ -141,7 +141,7 @@ ul { list-style: none; }
   max-width: 9.4em;
   text-wrap: balance;
 }
-.hero h1 em { font-style: normal; color: var(--accent); }
+.hero h1 em { font-style: normal; color: var(--accent); white-space: nowrap; }
 /* Новый заголовок шире прежнего: на ноутбуках чуть уменьшаем кегль, чтобы строка не заходила на 3D-объект */
 @media (min-width: 1025px) { .hero h1 { font-size: var(--fs-h2); max-width: 12.5em; } }
 .hero__sub { margin-top: clamp(16px, 3.5vh, 32px); max-width: 33rem; color: var(--ink-2); font-size: var(--fs-lead); }
