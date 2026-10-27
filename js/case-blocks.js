@@ -149,7 +149,9 @@ function method(b) {
 function compare(b) {
   const head = b.head.map((h) => `<th scope="col">${plain(h)}</th>`).join("");
   const rows = b.rows.map((r) => `<tr><th scope="row">${plain(r[0])}</th>${r.slice(1).map((c, i) => `<td data-label="${esc(b.head[i])}">${plain(c)}</td>`).join("")}</tr>`).join("");
-  return `${b.title ? `<h3 class="cmp__title">${plain(b.title)}</h3>` : ""}<table class="cmp"><thead><tr><td></td>${head}</tr></thead><tbody>${rows}</tbody></table>`;
+  // cols: [16, 42, 42] — фиксированные доли колонок в % (для десктопа); без него таблица ведёт себя как раньше
+  const cg = b.cols ? `<colgroup>${b.cols.map((w) => `<col style="width:${Number(w)}%">`).join("")}</colgroup>` : "";
+  return `${b.title ? `<h3 class="cmp__title">${plain(b.title)}</h3>` : ""}<table class="cmp${b.cols ? " cmp--fixed" : ""}">${cg}<thead><tr><td></td>${head}</tr></thead><tbody>${rows}</tbody></table>`;
 }
 
 // --- Путь пользователя: кривая над сеткой шагов (JourneyStep) ----------------------------

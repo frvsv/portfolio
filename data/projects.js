@@ -43,6 +43,22 @@ export const PROJECTS = [
     summary: "Продуктовый дизайн-концепт сервиса онлайн-записи: архитектура, сценарий записи и интерфейс MVP.",
     hasCase: true,
   },
+  {
+    slug: "barberbook-new",
+    status: "ready",
+    title: "BarberBook (новая версия)",
+    caption: "Сервис онлайн-записи в барбершопы внутри Telegram: дизайн-концепт",
+    category: "Дизайн-концепт",
+    platform: "Telegram Mini App",
+    cover: "assets/projects/barberbook/cover.webp",   // обложка карточки, 16:9
+    coverW: 3000, coverH: 1691,
+    coverM: "assets/projects/barberbook/cover-m.webp",
+    coverMW: 1440, coverMH: 1800,
+    coverBg: "#f6efe7",
+    coverAlt: "Обложка кейса BarberBook: название, роль и экран записи в Telegram Mini App на смартфоне",
+    summary: "Продуктовый дизайн-концепт сервиса онлайн-записи: архитектура, сценарий записи и интерфейс MVP.",
+    hasCase: true,
+  },
 
 ];
 
