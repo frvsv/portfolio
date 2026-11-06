@@ -274,6 +274,14 @@ const mockup = (p) => (p.callouts ? callouts(p) : `<figure class="phone">${img(p
 
 // Слот под видео: пока src пустой — серая заглушка; впишите путь в data — разметка не меняется
 function videoSlot(v) {
+  // Видео внутри корпуса телефона: рамка-PNG с прозрачным вырезом лежит поверх <video> — выглядит как остальные мокапы
+  if (v.src && v.frame) {
+    const f = v.frame, s = f.screen, pc = (n, d) => `${((n / d) * 100).toFixed(3)}%`;
+    return `<figure class="vphone" style="aspect-ratio:${f.w} / ${f.h}">
+      <video autoplay muted loop playsinline preload="auto"${v.poster ? ` poster="${esc(url(v.poster))}"` : ""} aria-label="${esc(v.label || "Видео")}" style="left:${pc(s.x, f.w)};top:${pc(s.y, f.h)};width:${pc(s.w, f.w)};height:${pc(s.h, f.h)}"><source src="${esc(url(v.src))}" type="video/mp4"></video>
+      <img class="vphone__frame" src="${esc(url(f.src))}" width="${f.w}" height="${f.h}" alt="" loading="lazy" decoding="async">
+    </figure>`;
+  }
   const body = v.src
     ? `<video controls playsinline preload="metadata"${v.poster ? ` poster="${esc(url(v.poster))}"` : ""} aria-label="${esc(v.label || "Видео")}"><source src="${esc(url(v.src))}"></video>`
     : `<div class="vslot__ph" role="img" aria-label="${esc(v.label || "Видео")} — будет добавлено"><svg viewBox="0 0 48 48" aria-hidden="true"><circle cx="24" cy="24" r="23" fill="none"/><path d="M19 15L34 24L19 33Z"/></svg></div>`;

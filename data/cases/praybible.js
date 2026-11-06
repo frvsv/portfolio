@@ -367,14 +367,11 @@ export default {
             { chip: { text: "Боль Эмили", tone: "sun" }, text: "Традиционными форматами духовной практики неудобно делиться" },
             { chip: { text: "Решение", tone: "mint" }, text: "Персональное видео за несколько кликов: аватар, имя адресата, тема" },
           ],
-          // Место под видео демонстрации (серый прямоугольник в презентации).
-          // Когда видео будет готово: положите файл в assets/projects/praybible/video/
-          // и впишите путь в src, например "assets/projects/praybible/video/demo.mp4".
           video: {
-            src: "",
-            poster: "",
-            ratio: "328 / 667",
-            label: "Видео демонстрации взаимодействий",
+            src: "assets/projects/praybible/video/prototype.mp4",
+            poster: IMG + "prototype-poster.webp",
+            label: "Прототип: создание персонального благословения за несколько шагов",
+            frame: { src: IMG + "phone-video-frame.webp", w: 931, h: 1936, screen: { x: 46, y: 37, w: 849, h: 1861 } },
           },
         },
       ],
