@@ -214,7 +214,7 @@
 .vslot { margin: 0; width: min(100%, var(--phone)); border-radius: 28px; overflow: hidden; background: #d9d8d6; position: relative; }
 .vslot video { width: 100%; height: 100%; object-fit: cover; display: block; background: #000; }
 .vphone { margin: 0; width: min(100%, var(--phone)); position: relative; }
-.vphone video { position: absolute; object-fit: cover; display: block; background: #000; }
+.vphone video { position: absolute; object-fit: fill; display: block; background: #000; }
 .vphone__frame { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; }
 .vslot__ph { position: absolute; inset: 0; display: grid; place-items: center; }
 .vslot__ph svg { width: 56px; height: 56px; opacity: .5; }

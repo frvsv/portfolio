@@ -371,7 +371,7 @@ export default {
             src: "assets/projects/praybible/video/prototype.mp4",
             poster: IMG + "prototype-poster.webp",
             label: "Прототип: создание персонального благословения за несколько шагов",
-            frame: { src: IMG + "phone-video-frame.webp", w: 931, h: 1936, screen: { x: 46, y: 37, w: 849, h: 1861 } },
+            frame: { src: IMG + "phone-video-frame.webp", w: 931, h: 1936, screen: { x: 47, y: 38, w: 847, h: 1859 } },
           },
         },
       ],
