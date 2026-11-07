@@ -1,3 +1,4 @@
+import { glueDom } from "./typo.js";
 import { PROJECTS, PROFILE } from "../data/projects.js";
 import { esc, renderNav, renderFooter, reveal } from "./common.js";
 import { initHero3D } from "./hero3d.js";
@@ -35,6 +36,7 @@ document.querySelectorAll("[data-tg]").forEach((a) => { a.href = "https://t.me/"
 document.querySelectorAll("[data-cv]").forEach((a) => { a.href = PROFILE.cv; });
 
 reveal();
+glueDom();
 
 const hero = document.querySelector(".hero");
 const canvas = document.getElementById("hero-canvas");

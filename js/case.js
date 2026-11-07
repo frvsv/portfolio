@@ -1,3 +1,4 @@
+import { glueDom } from "./typo.js";
 // Загрузчик страницы кейса: берёт slug из <body data-slug>, собирает страницу из
 // data/projects.js (шапка, соседние проекты) и data/cases/<slug>.js (содержимое).
 import { PROJECTS } from "../data/projects.js";
@@ -52,3 +53,4 @@ async function build() {
 }
 await build();
 reveal();
+glueDom();
