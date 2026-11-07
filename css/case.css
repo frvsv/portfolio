@@ -30,6 +30,7 @@
 .blk { min-width: 0; }
 
 /* ---------- Базовые мелкие элементы ---------- */
+.case { --chip-gap: 12px; }   /* отступ чип → текст везде */
 .chip { display: inline-block; align-self: flex-start; font: 600 var(--fs-small)/1 var(--font); padding: var(--sp-2) var(--sp-3); border-radius: 999px; background: var(--bg-2); color: var(--ink); }
 .chip--sun { background: var(--tint-sun); } .chip--mint { background: var(--tint-mint); }
 .chip--sky { background: var(--tint-sky); } .chip--ice { background: var(--tint-ice); }
@@ -45,7 +46,7 @@
 .plist--ol { list-style: decimal; }
 .plist li::marker { color: var(--ink-3); }
 /* .pp — один смысловой подраздел: плашка → содержимое 12px, пункт → пункт 8px, группа → группа 24px */
-.pp { display: flex; flex-direction: column; align-items: flex-start; gap: var(--sp-4); }
+.pp { display: flex; flex-direction: column; align-items: flex-start; gap: var(--chip-gap); }
 .pp > p, .pp > .plist { align-self: stretch; }
 
 /* ---------- Обложка ---------- */
@@ -103,6 +104,7 @@
 /* ---------- Метод + диаграмма ---------- */
 .method { display: grid; grid-template-columns: minmax(0, .9fr) minmax(0, 1.1fr); gap: clamp(24px, 4vw, 48px); align-items: start; }
 .method__l, .method__r { display: flex; flex-direction: column; gap: var(--sp-4); }
+.method__l > .chip, .method__r > .chip { margin-bottom: calc(var(--chip-gap) - var(--sp-4)); }
 .method__l p:not(.note) { max-width: var(--measure); }
 .dn { margin: 0; }
 .dn__svg { width: 100%; height: auto; display: block; overflow: visible; }
@@ -124,7 +126,6 @@
 .cmp--fixed { table-layout: fixed; }   /* доли колонок задаются через <colgroup> */
 .cmp--fixed th, .cmp--fixed td { overflow-wrap: anywhere; }
 /* компактная версия кейса: чип ближе к своему тексту (включается флагом compact в data/cases/*.js) */
-.case--compact .pp { gap: var(--sp-3); }
 .cmp thead tr + tr, .cmp thead { border: 0; }
 
 /* ---------- Путь пользователя (JourneyStep) ---------- */
